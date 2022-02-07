@@ -1,6 +1,6 @@
 # Created by Yuchen Lei
 # Created on 2022/2/7
-
+import sys
 
 class register:
     def __init__(self):
@@ -53,9 +53,24 @@ class calculator:
         return result
         
 
-    def read_line(self):
+    def read_line(self, from_file, file_name=None):
+        if from_file: # if taking the input from a file
+            with open(file_name) as f:
+                lines = f.readlines()
+            num_lines = len(lines) # number of lines in a file
+            idx = 0
+        else:
+            pass
+
         while True:
-            line = input()
+            if from_file:
+                if idx < num_lines: # if not reach the EOF, read a line
+                    line = lines[idx]
+                    idx += 1
+                else: # if reach the EOF, break
+                    break
+            else:
+                line = input()
             line = line.lower()
             num_word = len(line.split()) # how many words in one line, e.g. print <register> 2 words
             
@@ -122,7 +137,11 @@ class calculator:
 
 def main():
     cal = calculator()
-    cal.read_line()
+
+    if len(sys.argv) == 2: # load the input from a file
+        cal.read_line(from_file=True, file_name=sys.argv[1])
+    elif len(sys.argv) == 1: # load the input from the standard input stream
+        cal.read_line(from_file=False)
 
 
 if __name__ == '__main__':

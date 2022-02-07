@@ -2,4 +2,3 @@ a add 10
 b add a
 b add 1
 print b
-QUIT

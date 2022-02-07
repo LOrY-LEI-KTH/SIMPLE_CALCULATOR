@@ -6,4 +6,3 @@ B subtract 2
 print B
 A add 1
 print A
-quit

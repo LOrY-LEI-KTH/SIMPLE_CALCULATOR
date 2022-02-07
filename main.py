@@ -4,32 +4,32 @@
 
 class register:
     def __init__(self):
-        self._value = 0
-        self._access_value_flag = True  
+        self._val = 0
+        self._access_val_flag = True  
         # when flag is True, the value can be accessed directly; 
         # when flag is False, the value can be accessed after the operations between different registers
-    def get_value(self):
-        return self._value
+    def get_val(self):
+        return self._val
     def get_flag(self):
-        return self._access_value_flag
+        return self._access_val_flag
     def set_flag(self,flag):  
-        self._access_value_flag = flag
-    def operation_val(self, value, op_name): # the operation with value
-        if op_name == "add":
-            self.add(value)
-        elif op_name == "subtract":
-            self.subtract(value)
-        elif op_name == "multiply":
-            self.multiply(value)
+        self._access_val_flag = flag
+    def operation_val(self, val, op): # the operation with value
+        if op == "add":
+            self.add(val)
+        elif op == "subtract":
+            self.subtract(val)
+        elif op == "multiply":
+            self.multiply(val)
         else:
             print("no operation")
 
-    def add(self, value):
-        self._value += value
-    def subtract(self, value):
-        self._value -= value       
-    def multiply(self, value):
-        self._value *= value    
+    def add(self, val):
+        self._val += val
+    def subtract(self, val):
+        self._val -= val       
+    def multiply(self, val):
+        self._val *= val   
 
 class calculator:
     def __init__(self):
@@ -40,14 +40,13 @@ class calculator:
     def create_reg(self,reg_name):
         self._reg_dict[reg_name] = register()
         self._reg_op_dict[reg_name] = []
-        # print(reg_name)
 
-    def operation_reg(self, reg_val_1, reg_val_2, op_name): # the operation between registers
-        if op_name == "add":
+    def operation_reg(self, reg_val_1, reg_val_2, op): # the operation between registers
+        if op == "add":
             result = reg_val_1 + reg_val_2
-        elif op_name == "subtract":
+        elif op == "subtract":
             result = reg_val_1 - reg_val_2
-        elif op_name == "multiply":
+        elif op == "multiply":
             result = reg_val_1 * reg_val_2
         else:
             print("no operation")
@@ -60,10 +59,12 @@ class calculator:
             line = line.lower()
             num_word = len(line.split()) # how many words in one line, e.g. print <register> 2 words
             
-            if line == "quit": # when 
-                break
-            
-            if num_word == 2: 
+            if num_word == 1:
+                # quit
+                if line == "quit": # when 
+                    break
+        
+            elif num_word == 2: 
                 # print <register>
                 reg_name = line.split()[1]
                 if line.split()[0] == "print" and reg_name in self._reg_dict.keys():
@@ -76,18 +77,15 @@ class calculator:
                     # <register> <operation> <value>
                     op = line.split()[1]
                     reg_name = line.split()[0]
-                    value = int(line.split()[2]) # str -> int
+                    val = int(line.split()[2]) # str -> int
                     if reg_name not in self._reg_dict.keys(): # create the register if it doesn't exist
                         self.create_reg(reg_name)
-                    # if op in self._op_list and reg_name in self._reg_dict.keys():
                     if op in self._op_list:
-                        self._reg_dict[reg_name].operation_val(value, op)
+                        self._reg_dict[reg_name].operation_val(val, op)
                     else:
                         print("no operation")
                 else:   
-                    #TODO
                     # <register_1> <operation> <register_2>
-                    pass
                     op = line.split()[1]
                     reg_name_1 = line.split()[0]
                     reg_name_2 = line.split()[2]
@@ -101,33 +99,30 @@ class calculator:
                             self._reg_dict[reg_name_1].set_flag(False)
                         self._reg_op_dict[reg_name_1].append([op,reg_name_2])
 
-
             else: # 
                 print("num_word not right nunber of words")
 
 
     def print_reg(self, reg_name):
-        print(self.get_reg_value(reg_name))
+        print(self.get_reg_val(reg_name))
 
-
-    def get_reg_value(self, reg_name_1):
+    def get_reg_val(self, reg_name_1):
         if self._reg_dict[reg_name_1].get_flag():
-            return self._reg_dict[reg_name_1].get_value()
+            return self._reg_dict[reg_name_1].get_val()
         else:
             op_reg_arr = self._reg_op_dict[reg_name_1] # get all the operations with other registers, e.g.  {A:[["add","B"],["subtract","C"]]
-            reg_value_1 = self._reg_dict[reg_name_1].get_value()
+            reg_val_1 = self._reg_dict[reg_name_1].get_val()
             for op_reg in op_reg_arr:
                 op = op_reg[0]
                 reg_name_2 = op_reg[1]
-                reg_value_2 = self.get_reg_value(reg_name_2)
-                reg_value_1 = self.operation_reg(reg_value_1, reg_value_2, op)
-            return reg_value_1
+                reg_val_2 = self.get_reg_val(reg_name_2)
+                reg_val_1 = self.operation_reg(reg_val_1, reg_val_2, op)
+            return reg_val_1
 
 
 def main():
     cal = calculator()
     cal.read_line()
-    pass
 
 
 if __name__ == '__main__':

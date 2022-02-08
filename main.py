@@ -183,13 +183,13 @@ class Calculator:
                         # create the register if the reg_name doesn't exist and is not a pure numeric name.
                         self.create_reg(reg_name_1)
                     elif reg_name_1.isdecimal():
-                        logging.warning("register name consist of only numbers")
+                        logging.warning("register name consists of only numbers")
                         continue
                     if reg_name_2 not in self._reg_dict.keys() and not reg_name_2.isdecimal(): 
                         # create the register if the reg_name doesn't exist and is not a pure numeric name.
                         self.create_reg(reg_name_2)
                     elif reg_name_2.isdecimal():
-                        logging.warning("register name can't consist of only numbers")
+                        logging.warning("register name consists of only numbers")
                         continue
                     if op in self._op_list:
                         if self._reg_dict[reg_name_1].get_flag():
